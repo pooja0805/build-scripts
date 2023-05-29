@@ -24,8 +24,8 @@ PACKAGE_VERSION=${1:-3.2.19}
 PACKAGE_URL=https://github.com/orientechnologies/orientdb.git
 HOME_DIR=${PWD}
 
-yum update -y
-yum install -y git wget tar java-1.8.0-openjdk-devel openssl-devel freetype
+sudo yum update -y
+sudo yum install -y git wget tar openssl-devel freetype fontconfig
 
 # Install IBM Semeru Runtime Java 11
 cd $HOME_DIR
@@ -42,12 +42,12 @@ git clone $PACKAGE_URL
 cd $PACKAGE_NAME/
 git checkout $PACKAGE_VERSION
 
-export MAVEN_OPTS="-Xmx2g"
+export MAVEN_OPTS="-Xmx6g"
 
-if ! ./mvnw clean install -DskipTests; then
+if ! ./mvnw clean install -DskipTests -Dpolyglot.engine.WarnInterpreterOnly=false; then
 	echo "Build Fails"
 	exit 1
-elif ! ./mvnw test; then
+elif ! ./mvnw test -Dpolyglot.engine.WarnInterpreterOnly=false; then
 	echo "Test Fails"
 	exit 2
 else
