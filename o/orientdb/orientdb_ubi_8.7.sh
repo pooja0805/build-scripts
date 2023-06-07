@@ -42,7 +42,7 @@ git clone $PACKAGE_URL
 cd $PACKAGE_NAME/
 git checkout $PACKAGE_VERSION
 
-export MAVEN_OPTS="-Xmx6g"
+export MAVEN_OPTS="-Xmx2g"
 
 if ! ./mvnw clean install -DskipTests -Dpolyglot.engine.WarnInterpreterOnly=false; then
 	echo "Build Fails"
