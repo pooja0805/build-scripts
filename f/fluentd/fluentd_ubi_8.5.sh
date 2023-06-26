@@ -1,10 +1,10 @@
 #!/bin/bash -e
 # -----------------------------------------------------------------------------
 #
-# Package	: fluentd
-# Version	: v1.14.5
+# Package	    : fluentd
+# Version	    : v1.16.1
 # Source repo	: https://github.com/fluent/fluentd
-# Tested on	: UBI: 8.5
+# Tested on	    : UBI: 8.5
 # Language      : Ruby
 # Travis-Check  : True
 # Script License: Apache License, Version 2 or later
@@ -19,23 +19,35 @@
 # ----------------------------------------------------------------------------
 
 PACKAGE_NAME=fluentd
-PACKAGE_VERSION=${1:-v1.14.5}
+PACKAGE_VERSION=${1:-v1.16.1}
 PACKAGE_URL=https://github.com/fluent/fluentd
+HOME_DIR=$PWD
 
-yum -y update && yum install -y nodejs nodejs-devel nodejs-packaging npm python38 python38-devel ncurses git jq curl make gcc-c++ procps gnupg2 ruby libcurl-devel libffi-devel ruby-devel redhat-rpm-config sqlite sqlite-devel java-1.8.0-openjdk-devel rubygem-rake ruby rubygems wget
+yum install -y nodejs nodejs-devel nodejs-packaging npm python38 python38-devel ncurses git jq curl make gcc-c++ procps gnupg2 ruby libcurl-devel libffi-devel ruby-devel redhat-rpm-config sqlite sqlite-devel java-1.8.0-openjdk-devel rubygem-rake ruby rubygems wget
 
+cd $HOME_DIR
 gem sources --add https://rubygems.org/
 wget https://rubygems.org/rubygems/rubygems-3.3.15.tgz
 tar zxvf rubygems-3.3.15.tgz
 cd rubygems-3.3.15
 ruby setup.rb
 
-cd ..
+cd $HOME_DIR
 git clone $PACKAGE_URL
-cd fluentd
+cd $PACKAGE_NAME
 git checkout $PACKAGE_VERSION
 
 gem install bundler
-bundle install --path vendor/bundle
 
-bundle exec rake test TEST=test/test_*.rb
+if ! bundle install --path vendor/bundle; then
+    echo "Install Fails"
+    exit 1
+fi
+
+if ! bundle exec rake test TEST=test/test_*.rb; then
+    echo "Test Fails"
+    exit 2
+else
+    echo "Install & Test Success"
+    exit 0
+fi
