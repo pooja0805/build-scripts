@@ -1,0 +1,93 @@
+diff --git a/buildscripts/kokoro/linux_artifacts.sh b/buildscripts/kokoro/linux_artifacts.sh
+index cdf360762..c49e3c0e2 100755
+--- a/buildscripts/kokoro/linux_artifacts.sh
++++ b/buildscripts/kokoro/linux_artifacts.sh
+@@ -37,3 +37,7 @@ cp -r "$LOCAL_MVN_TEMP"/* "$MVN_ARTIFACT_DIR"/
+ # for aarch64 platform
+ sudo apt-get install -y g++-aarch64-linux-gnu
+ SKIP_TESTS=true ARCH=aarch_64 "$GRPC_JAVA_DIR"/buildscripts/kokoro/unix.sh
++
++# for ppc64le platform
++sudo apt-get install -y g++-powerpc64le-linux-gnu
++SKIP_TESTS=true ARCH=ppcle_64 "$GRPC_JAVA_DIR"/buildscripts/kokoro/unix.sh
+diff --git a/buildscripts/kokoro/unix.sh b/buildscripts/kokoro/unix.sh
+index c64bc7e22..633808802 100755
+--- a/buildscripts/kokoro/unix.sh
++++ b/buildscripts/kokoro/unix.sh
+@@ -72,7 +72,7 @@ fi
+ LOCAL_MVN_TEMP=$(mktemp -d)
+ # Note that this disables parallel=true from GRADLE_FLAGS
+ if [[ -z "${ALL_ARTIFACTS:-}" ]]; then
+-  if [[ $ARCH == "aarch_64" ]]; then
++  if [[ $ARCH == "aarch_64" || "$ARCH" = "ppcle_64" ]]; then
+     GRADLE_FLAGS+=" -x grpc-compiler:generateTestProto -x grpc-compiler:generateTestLiteProto"
+     GRADLE_FLAGS+=" -x grpc-compiler:testGolden -x grpc-compiler:testLiteGolden"
+     GRADLE_FLAGS+=" -x grpc-compiler:testDeprecatedGolden -x grpc-compiler:testDeprecatedLiteGolden"
+diff --git a/buildscripts/kokoro/upload_artifacts.sh b/buildscripts/kokoro/upload_artifacts.sh
+index c3c97444d..682f0c346 100644
+--- a/buildscripts/kokoro/upload_artifacts.sh
++++ b/buildscripts/kokoro/upload_artifacts.sh
+@@ -30,6 +30,9 @@ LOCAL_MVN_ARTIFACTS="$KOKORO_GFILE_DIR"/github/grpc-java/mvn-artifacts/
+ # for linux aarch64 platform
+ [[ "$(find "$LOCAL_MVN_ARTIFACTS" -type f -iname 'protoc-gen-grpc-java-*-linux-aarch_64.exe' | wc -l)" != '0' ]]
+ 
++# for linux ppc64le platform
++[[ "$(find "$LOCAL_MVN_ARTIFACTS" -type f -iname 'protoc-gen-grpc-java-*-linux-ppcle_64.exe' | wc -l)" != '0' ]]
++
+ # from macos job:
+ [[ "$(find "$LOCAL_MVN_ARTIFACTS" -type f -iname 'protoc-gen-grpc-java-*-osx-x86_64.exe' | wc -l)" != '0' ]]
+ 
+diff --git a/buildscripts/make_dependencies.sh b/buildscripts/make_dependencies.sh
+index 92ef9d7f7..86a315fe9 100755
+--- a/buildscripts/make_dependencies.sh
++++ b/buildscripts/make_dependencies.sh
+@@ -36,6 +36,8 @@ else
+       --prefix="$INSTALL_DIR"
+   elif [[ "$ARCH" == aarch* ]]; then
+     ./configure --disable-shared --host=aarch64-linux-gnu --prefix="$INSTALL_DIR"
++  elif [[ "$ARCH" == ppc* ]]; then
++    ./configure --disable-shared --host=powerpc64le-linux-gnu --prefix="$INSTALL_DIR"
+   fi
+   # the same source dir is used for 32 and 64 bit builds, so we need to clean stale data first
+   make clean
+diff --git a/compiler/build.gradle b/compiler/build.gradle
+index 098f48c30..7b73bd94f 100644
+--- a/compiler/build.gradle
++++ b/compiler/build.gradle
+@@ -50,7 +50,10 @@ model {
+             }
+         }
+         gcc(Gcc) {
+-            target("ppcle_64")
++            target("ppcle_64")  {
++                cppCompiler.executable = 'g++'
++                linker.executable = 'g++'
++            }
+             target("aarch_64") {
+                 cppCompiler.executable = 'aarch64-linux-gnu-g++'
+                 linker.executable = 'aarch64-linux-gnu-g++'
+diff --git a/compiler/check-artifact.sh b/compiler/check-artifact.sh
+index 13ae89c74..825f2fd6b 100755
+--- a/compiler/check-artifact.sh
++++ b/compiler/check-artifact.sh
+@@ -61,6 +61,10 @@ checkArch ()
+         assertEq "$format" "elf64-x86-64" $LINENO
+       elif [[ "$ARCH" == aarch_64 ]]; then
+         assertEq "$format" "elf64-little" $LINENO
++      elif [[ "$ARCH" == ppcle_64 ]]; then
++        format="$(objdump -f "$1" | grep -o "file format .*$" | grep -o "[^ ]*$")"
++        echo Format=$format
++        assertEq "$format" "elf64-powerpcle" $LINENO
+       else
+         fail "Unsupported arch: $ARCH"
+       fi
+@@ -108,6 +112,9 @@ checkDependencies ()
+     elif [[ "$ARCH" == aarch_64 ]]; then
+       dump_cmd='aarch64-linux-gnu-objdump -x '"$1"' |grep "NEEDED"'
+       white_list="linux-vdso\.so\.1\|libpthread\.so\.0\|libm\.so\.6\|libc\.so\.6\|ld-linux-aarch64\.so\.1"
++    elif [[ "$ARCH" == ppcle_64 ]]; then
++      dump_cmd='objdump -x '"$1"' |grep "NEEDED"'
++      white_list="linux-vdso64\.so\.1\|libpthread\.so\.0\|libm\.so\.6\|libc\.so\.6\|ld64\.so\.2\|libstdc++\.so\.6\|libgcc_s\.so\.1"
+     fi
+   elif [[ "$OS" == osx ]]; then
+     dump_cmd='otool -L '"$1"' | fgrep dylib'
