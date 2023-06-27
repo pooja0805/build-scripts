@@ -37,14 +37,12 @@ git clone $PACKAGE_URL
 cd $PACKAGE_NAME
 git checkout $PACKAGE_VERSION
 
-gem install bundler
-
-if ! bundle install --path vendor/bundle; then
+if ! gem install fluentd -v $PACKAGE_VERSION; then
     echo "Install Fails"
     exit 1
 fi
 
-if ! bundle exec rake test TEST=test/test_*.rb; then
+if ! bundle exec rake test; then
     echo "Test Fails"
     exit 2
 else
