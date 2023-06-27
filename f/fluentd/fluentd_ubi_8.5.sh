@@ -37,7 +37,9 @@ git clone $PACKAGE_URL
 cd $PACKAGE_NAME
 git checkout $PACKAGE_VERSION
 
-if ! gem install fluentd -v $PACKAGE_VERSION; then
+gem install bundler
+
+if ! bundle install --path vendor/bundle; then
     echo "Install Fails"
     exit 1
 fi
