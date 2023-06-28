@@ -23,14 +23,25 @@ PACKAGE_VERSION=${1:-v1.16.1}
 PACKAGE_URL=https://github.com/fluent/fluentd
 HOME_DIR=$PWD
 
-sudo yum install -y nodejs nodejs-devel nodejs-packaging npm python38 python38-devel ncurses git jq curl make gcc-c++ procps gnupg2 ruby libcurl-devel libffi-devel ruby-devel redhat-rpm-config sqlite sqlite-devel java-1.8.0-openjdk-devel rubygem-rake ruby rubygems wget
+sudo yum install -y openssl-devel git gdbm-devel gcc make wget tar libyaml-devel
+
+sudo yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/AppStream/ppc64le/os/
+sudo yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/PowerTools/ppc64le/os/
+sudo yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/BaseOS/ppc64le/os/
+wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
+sudo mv RPM-GPG-KEY-CentOS-Official /etc/pki/rpm-gpg/.
+sudo rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-Official
+
+sudo yum install -y flex flex-devel bison readline-devel
 
 cd $HOME_DIR
-gem sources --add https://rubygems.org/
-wget https://rubygems.org/rubygems/rubygems-3.4.14.tgz
-tar zxvf rubygems-3.4.14.tgz
-cd rubygems-3.4.14
-sudo ruby setup.rb
+wget http://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.2.tar.gz
+tar zxf ruby-3.2.2.tar.gz
+cd ruby-3.2.2
+./configure
+make
+sudo make install
+ruby -v
 
 cd $HOME_DIR
 git clone $PACKAGE_URL
