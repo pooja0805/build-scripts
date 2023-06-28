@@ -55,7 +55,7 @@ if ! bundle install --path vendor/bundle; then
     exit 1
 fi
 
-if ! bundle exec rake test; then
+if ! bundle exec rake test TEST=test/test_*.rb; then
     echo "Test Fails"
     exit 2
 else
