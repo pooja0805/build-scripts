@@ -30,7 +30,7 @@ gem sources --add https://rubygems.org/
 wget https://rubygems.org/rubygems/rubygems-3.3.15.tgz
 tar zxvf rubygems-3.3.15.tgz
 cd rubygems-3.3.15
-ruby setup.rb
+sudo ruby setup.rb
 
 cd $HOME_DIR
 git clone $PACKAGE_URL
