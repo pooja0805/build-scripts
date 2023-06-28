@@ -43,6 +43,8 @@ make
 make install
 export PATH=/usr/local/bin:$PATH
 ruby -v
+export GEM_HOME=${HOME}/.gem/ruby
+export PATH=${HOME}/.gem/ruby/bin:$PATH
 
 cd $HOME_DIR
 git clone $PACKAGE_URL
