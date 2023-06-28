@@ -44,6 +44,8 @@ if ! bundle install --path vendor/bundle; then
     exit 1
 fi
 
+export PATH=vendor/bundle/ruby/2.5.0/bin:$PATH
+
 if ! bundle exec rake test; then
     echo "Test Fails"
     exit 2
