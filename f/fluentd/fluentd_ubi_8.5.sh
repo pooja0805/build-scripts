@@ -23,16 +23,16 @@ PACKAGE_VERSION=${1:-v1.16.1}
 PACKAGE_URL=https://github.com/fluent/fluentd
 HOME_DIR=$PWD
 
-sudo yum install -y yum-utils openssl-devel git gdbm-devel gcc make wget tar libyaml-devel
+yum install -y yum-utils openssl-devel git gdbm-devel gcc make wget tar libyaml-devel
 
-sudo yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/AppStream/ppc64le/os/
-sudo yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/PowerTools/ppc64le/os/
-sudo yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/BaseOS/ppc64le/os/
+yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/AppStream/ppc64le/os/
+yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/PowerTools/ppc64le/os/
+yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/BaseOS/ppc64le/os/
 wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
-sudo mv RPM-GPG-KEY-CentOS-Official /etc/pki/rpm-gpg/.
-sudo rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-Official
+mv RPM-GPG-KEY-CentOS-Official /etc/pki/rpm-gpg/.
+rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-Official
 
-sudo yum install -y flex flex-devel bison readline-devel
+yum install -y flex flex-devel bison readline-devel
 
 cd $HOME_DIR
 wget http://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.2.tar.gz
@@ -40,7 +40,7 @@ tar zxf ruby-3.2.2.tar.gz
 cd ruby-3.2.2
 ./configure
 make
-sudo make install
+make install
 export PATH=/usr/local/bin:$PATH
 ruby -v
 
