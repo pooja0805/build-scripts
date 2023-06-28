@@ -23,7 +23,7 @@ PACKAGE_VERSION=${1:-v1.16.1}
 PACKAGE_URL=https://github.com/fluent/fluentd
 HOME_DIR=$PWD
 
-sudo yum install -y openssl-devel git gdbm-devel gcc make wget tar libyaml-devel
+sudo yum install -y yum-utils openssl-devel git gdbm-devel gcc make wget tar libyaml-devel
 
 sudo yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/AppStream/ppc64le/os/
 sudo yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/PowerTools/ppc64le/os/
