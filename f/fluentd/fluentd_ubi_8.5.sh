@@ -27,9 +27,9 @@ sudo yum install -y nodejs nodejs-devel nodejs-packaging npm python38 python38-d
 
 cd $HOME_DIR
 gem sources --add https://rubygems.org/
-wget https://rubygems.org/rubygems/rubygems-3.3.15.tgz
-tar zxvf rubygems-3.3.15.tgz
-cd rubygems-3.3.15
+wget https://rubygems.org/rubygems/rubygems-3.4.14.tgz
+tar zxvf rubygems-3.4.14.tgz
+cd rubygems-3.4.14
 sudo ruby setup.rb
 
 cd $HOME_DIR
@@ -43,8 +43,6 @@ if ! bundle install --path vendor/bundle; then
     echo "Install Fails"
     exit 1
 fi
-
-export PATH=vendor/bundle/ruby/2.5.0/bin:$PATH
 
 if ! bundle exec rake test; then
     echo "Test Fails"
