@@ -41,6 +41,7 @@ cd ruby-3.2.2
 ./configure
 make
 sudo make install
+export PATH=/usr/local/bin:$PATH
 ruby -v
 
 cd $HOME_DIR
