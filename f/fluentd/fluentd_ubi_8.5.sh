@@ -23,7 +23,7 @@ PACKAGE_VERSION=${1:-v1.16.1}
 PACKAGE_URL=https://github.com/fluent/fluentd
 HOME_DIR=$PWD
 
-yum install -y nodejs nodejs-devel nodejs-packaging npm python38 python38-devel ncurses git jq curl make gcc-c++ procps gnupg2 ruby libcurl-devel libffi-devel ruby-devel redhat-rpm-config sqlite sqlite-devel java-1.8.0-openjdk-devel rubygem-rake ruby rubygems wget
+sudo yum install -y nodejs nodejs-devel nodejs-packaging npm python38 python38-devel ncurses git jq curl make gcc-c++ procps gnupg2 ruby libcurl-devel libffi-devel ruby-devel redhat-rpm-config sqlite sqlite-devel java-1.8.0-openjdk-devel rubygem-rake ruby rubygems wget
 
 cd $HOME_DIR
 gem sources --add https://rubygems.org/
