@@ -21,7 +21,7 @@
 PACKAGE_NAME=apollo-client
 PACKAGE_VERSION=${1:-v3.7.16}
 PACKAGE_URL=https://github.com/apollographql/apollo-client.git
-NODE_VERSION=20.2.0
+NODE_VERSION=16.20.0
 HOME_DIR=${PWD}
 
 yum install -y yum-utils wget tar gzip curl git make gcc gcc-c++ python3-devel
