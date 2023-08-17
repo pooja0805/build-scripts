@@ -1,0 +1,24 @@
+name: CodeQL Analysis
+
+on:
+  push:
+    branches:
+      - codeql  # Adjust this to your default branch
+
+jobs:
+  analyze:
+    name: Analyze code with CodeQL
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v1
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v1
