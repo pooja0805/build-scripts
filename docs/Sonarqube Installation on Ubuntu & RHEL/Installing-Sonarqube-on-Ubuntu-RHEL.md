@@ -25,11 +25,20 @@ The instructions provided below specify the steps to run [SonarQube](https://doc
     ```
 
 #### 1.2) Set JAVA_HOME & PATH environment variables
-  ```bash
-  export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-ppc64el
-  export PATH=$JAVA_HOME/bin:$PATH
-  java -version
-  ```
+*  RHEL
+    ```
+    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+    export PATH=$JAVA_HOME/bin:$PATH
+    java -version
+    ```
+
+*  Ubuntu
+    ```
+    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-ppc64el
+    export PATH=$JAVA_HOME/bin:$PATH
+    java -version
+    ```
+  
 
 ### Step 2: Download and extract SonarQube and sonar-scanner-cli
 ```bash
