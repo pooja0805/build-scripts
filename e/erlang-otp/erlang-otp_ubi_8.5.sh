@@ -19,17 +19,16 @@
 # ----------------------------------------------------------------------------
 
 PACKAGE_NAME=erlang-otp
-PACKAGE_VERSION=${1:-OTP-25.3}
+PACKAGE_VERSION=${1:-OTP-26.2.3}
 PACKAGE_URL=https://github.com/erlang/otp.git
 HOME_DIR=${PWD}
 
 yum update -y
-yum install -y yum-utils autoconf gawk gcc gcc-c++ gzip libxml2-devel libxslt ncurses-devel openssl-devel make tar unixODBC-devel wget git
+yum install -y yum-utils autoconf gawk gcc gcc-c++ gzip libxml2-devel libxslt ncurses-devel openssl-devel make tar wget git
 
 #Adding repo to install flex
-yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/AppStream/ppc64le/os/
-yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/PowerTools/ppc64le/os/
-yum-config-manager --add-repo http://rpmfind.net/linux/centos/8-stream/BaseOS/ppc64le/os/
+yum-config-manager --add-repo https://rpmfind.net/linux/centos-stream/9-stream/AppStream/ppc64le/os/
+yum-config-manager --add-repo https://rpmfind.net/linux/centos-stream/9-stream/BaseOS/ppc64le/os/
 wget https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
 mv RPM-GPG-KEY-CentOS-Official /etc/pki/rpm-gpg/.
 rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-Official
