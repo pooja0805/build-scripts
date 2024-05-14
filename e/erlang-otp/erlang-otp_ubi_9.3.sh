@@ -4,7 +4,7 @@
 # Package	: erlang-otp
 # Version	: OTP-25.3
 # Source repo	: https://github.com/erlang/otp.git
-# Tested on	: UBI: 8.5
+# Tested on	: UBI: 9.3
 # Language      : Erlang,C++,C
 # Travis-Check  : True
 # Script License: Apache License, Version 2 or later
