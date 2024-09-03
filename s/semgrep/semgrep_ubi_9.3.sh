@@ -68,9 +68,6 @@ git submodule update --init --recursive
 
 make setup
 python3 -m pip install pipenv pre-commit
-# sed -i 's/jsonnet/jsonnet-binary/g' cli/Pipfile.lock 
-# sed -i 's/7e770c7bf3a366b97b650a39430450f77612e74406731eb75c5bd59f3f104d4f/fbadf25f28161b0ccf29e0b72ef689790d14a9b23a681ab6846bd7cb12e17f1d/g' cli/Pipfile.lock 
-# sed -i 's/0.20.0/0.17.0/g' cli/Pipfile.lock
 
 if ! make core; sudo make install; then
     echo "------------------$PACKAGE_NAME:install_fails-------------------------------------"
