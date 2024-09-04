@@ -69,21 +69,26 @@ git submodule update --init --recursive
 make setup
 python3 -m pip install pipenv pre-commit
 
-if ! make core; sudo make install; then
-    echo "------------------$PACKAGE_NAME:install_fails-------------------------------------"
+if ! make core; then
+    echo "------------------$PACKAGE_NAME:build_fails-------------------------------------"
     echo "$PACKAGE_URL $PACKAGE_NAME"
-    echo "$PACKAGE_NAME  |  $PACKAGE_URL | $PACKAGE_VERSION | $OS_NAME | GitHub | Fail | Install_Fails"
+    echo "$PACKAGE_NAME  |  $PACKAGE_URL | $PACKAGE_VERSION | $OS_NAME | GitHub | Fail |  Build_Fails"
     exit 1
-elif ! make test; make check; then
-    echo "------------------$PACKAGE_NAME:install_success_but_test_fails---------------------"
+elif ! sudo make install; then
+    echo "------------------$PACKAGE_NAME:build_success_but_install_fails-------------------------------------"
     echo "$PACKAGE_URL $PACKAGE_NAME"
-    echo "$PACKAGE_NAME  |  $PACKAGE_URL | $PACKAGE_VERSION | $OS_NAME | GitHub | Fail | Install_success_but_test_Fails"
+    echo "$PACKAGE_NAME  |  $PACKAGE_URL | $PACKAGE_VERSION | $OS_NAME | GitHub | Fail | Build_Success_but_Install_Fails"
+    exit 1
+elif ! make check; then
+    echo "------------------$PACKAGE_NAME:build_install_success_but_test_fails---------------------"
+    echo "$PACKAGE_URL $PACKAGE_NAME"
+    echo "$PACKAGE_NAME  |  $PACKAGE_URL | $PACKAGE_VERSION | $OS_NAME | GitHub | Fail | Build_Install_Success_but_Test_Fails"
     exit 2
 else
     export PATH=/usr/local/bin:$PATH
     semgrep --version | grep ${PACKAGE_VERSION:1}
-    echo "------------------$PACKAGE_NAME:install_&_test_both_success-------------------------"
+    echo "------------------$PACKAGE_NAME:build_install_&_test_success-------------------------"
     echo "$PACKAGE_URL $PACKAGE_NAME"
-    echo "$PACKAGE_NAME  |  $PACKAGE_URL | $PACKAGE_VERSION | $OS_NAME | GitHub | Pass | Both_Install_and_Test_Success"
+    echo "$PACKAGE_NAME  |  $PACKAGE_URL | $PACKAGE_VERSION | $OS_NAME | GitHub | Pass | Build_Install_and_Test_Success"
     exit 0
 fi
