@@ -67,7 +67,10 @@ git clone $PACKAGE_URL
 cd $PACKAGE_NAME
 git checkout $PACKAGE_VERSION
 
-git submodule update --init --recursive
+# git submodule update --init --recursive
+git submodule init
+git submodule update
+
 
 make setup
 python3 -m pip install pipenv pre-commit
