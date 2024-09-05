@@ -45,6 +45,7 @@ make
 sudo make install
 export PATH=/usr/local/bin:$PATH
 ocaml --version
+echo "------------------OCaml Build Successful!-------------------------------------"
 
 # Install OPam
 cd ..
@@ -57,6 +58,8 @@ sudo make install
 opam --version
 echo "5" | opam init --disable-sandboxing
 eval $(opam env --switch=default)
+echo "------------------OPam Build Successful!-------------------------------------"
+
 
 # Build, Install and Test Semgrep
 cd ..
