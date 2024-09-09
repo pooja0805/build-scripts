@@ -22,6 +22,7 @@ PACKAGE_NAME=semgrep
 PACKAGE_VERSION=${1:-v1.85.0}
 PACKAGE_URL=https://github.com/semgrep/semgrep.git
 
+
 # Adding repos to install required dependencies
 sudo yum install -y yum-utils vim wget tar curl gzip procps-ng --allowerasing
 sudo yum-config-manager --add-repo https://rpmfind.net/linux/centos-stream/9-stream/AppStream/ppc64le/os/
@@ -60,6 +61,8 @@ echo "5" | opam init --disable-sandboxing
 eval $(opam env --switch=default)
 echo "------------------OPam Build Successful!-------------------------------------"
 
+#Install Dune
+opam install dune
 
 # Build, Install and Test Semgrep
 cd ..
@@ -72,7 +75,7 @@ git submodule init
 git submodule update
 
 make setup
-pip3 install pipenv pre-commit
+python3 -m pip install pipenv pre-commit
 
 if ! make core; then
     echo "------------------$PACKAGE_NAME:build_fails-------------------------------------"
