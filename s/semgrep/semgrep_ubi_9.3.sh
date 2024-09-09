@@ -71,9 +71,8 @@ git checkout $PACKAGE_VERSION
 git submodule init
 git submodule update
 
-
 make setup
-python3 -m pip install pipenv pre-commit
+pip3 install pipenv pre-commit
 
 if ! make core; then
     echo "------------------$PACKAGE_NAME:build_fails-------------------------------------"
