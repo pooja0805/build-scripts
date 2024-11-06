@@ -29,7 +29,7 @@ HOME_DIR=${PWD}
 yum install -y wget tar git gzip
 
 #Installing Nodejs 
-NODE_VERSION=22.10.0
+NODE_VERSION=20.12.2
 wget -q https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-ppc64le.tar.gz
 tar -xzf node-v$NODE_VERSION-linux-ppc64le.tar.gz
 export PATH=$PWD/node-v$NODE_VERSION-linux-ppc64le/bin:$PATH
