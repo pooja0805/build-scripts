@@ -28,6 +28,10 @@ HOME_DIR=${PWD}
 
 yum install -y wget tar git gzip
 
+export LC_ALL=C.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+
 #Installing Nodejs 
 NODE_VERSION=20.12.2
 wget -q https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-ppc64le.tar.gz
