@@ -26,7 +26,7 @@ PACKAGE_VERSION=${1:-2.0.20}
 PACKAGE_URL=https://github.com/jorgebucaran/colorette.git
 HOME_DIR=${PWD}
 
-yum install -y wget tar git gzip
+sudo yum install -y wget tar git gzip
 
 export LC_ALL=C.UTF-8
 export LANG=en_US.UTF-8
