@@ -73,6 +73,23 @@ done
 echo "------------------------Installing dependencies-------------------"
 yum install -y  autoconf automake libtool curl-devel  atlas-devel patch 
 
+#Build and install ffmpeg from source 
+cd $CURRENT_DIR
+wget https://ffmpeg.org/releases/ffmpeg-2.8.22.tar.gz
+tar -xvf ffmpeg-2.8.22.tar.gz
+cd ffmpeg-2.8.22
+./configure --prefix=/usr/local --enable-shared
+make -j$(nproc)
+make install
+ldconfig
+
+ln -sf /usr/local/lib/libavformat.so.57 /usr/local/lib/libavformat-ffmpeg.so.57
+ln -sf /usr/local/lib/libavcodec.so.57 /usr/local/lib/libavcodec-ffmpeg.so.57
+ln -sf /usr/local/lib/libavutil.so.5 /usr/local/lib/libavutil-ffmpeg.so.55
+
+export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
+
+echo "-----------------------------------------------------Installed ffmpeg-----------------------------------------------------"
 
 #Build HDF5 from source 
 cd $CURRENT_DIR
@@ -156,8 +173,7 @@ make install
 ln -s /usr/local/bin/patchelf /usr/bin/patchelf
 echo "-----------------------------------------------------Installed patchelf-----------------------------------------------------"
 
-
-#installing patchelf from source
+#installing libtirpc from source
 cd $CURRENT_DIR
 yum install -y krb5-devel
 git clone https://github.com/alisw/libtirpc
@@ -305,6 +321,7 @@ bazel query "//tensorflow/tools/pip_package:*"
 echo "Bazel query successful ---------------------------------------------------------------------------------------------"
 bazel build -s \
   --distdir=/bazel-dist \
+  --jobs=32 \
   //tensorflow/tools/pip_package:build_pip_package --config=opt
 
 echo "Bazel build successful ---------------------------------------------------------------------------------------------"
@@ -330,8 +347,17 @@ export BAZEL_CXXFLAGS="-std=c++17"
 export CC=/opt/rh/gcc-toolset-12/root/usr/bin/gcc
 export CXX=/opt/rh/gcc-toolset-12/root/usr/bin/g++
 
-
 cd $CURRENT_DIR/io
+
+# ------------------------------------------------------------------
+# Tell tf-io to use system FFmpeg instead of bundled/RHEL naming
+# ------------------------------------------------------------------
+export TFIO_SYSTEM_FFMPEG=1
+export TFIO_FFMPEG_ROOT=/usr/local
+
+# Make sure Bazel can find headers and libs
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 python3.11 -m pip install grpcio-tools==1.56.2 --no-cache-dir --no-build-isolation
 python3.11 -m pip install .
